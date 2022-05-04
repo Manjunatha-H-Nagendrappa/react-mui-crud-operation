@@ -44,6 +44,9 @@
 h2 {
   padding-bottom: 20px;
 }
+h6 {
+  color: green;
+}
 .button {
-  padding: 16px;
+  padding: 20px;
 }
