@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -33,6 +33,7 @@ function App() {
   const [hobbies, setHobbies] = useState([]);
   const [file, setFile] = useState("");
   const [data, setData] = useState([]);
+  const [editData, setEditData] = useState(null);
 
   const [fnameErr, setFnameErr] = useState(false);
   const [lnameErr, setLnameErr] = useState(false);
@@ -215,7 +216,7 @@ function App() {
       setHobbiesErr("please select your hobbies");
       setFileErr("please attach your document");
       alert("please fill out all the form details");
-    } else {
+    } else if (!editData) {
       const formData = {
         id: Math.floor(Math.random() * 100) + 1,
         fname: fname,
@@ -224,35 +225,21 @@ function App() {
         city: city,
       };
       setData([...data, formData]);
+      setFname("");
+      setLname("");
+      setGender("");
+      setDate("");
+      setEmail("");
+      setPhone("");
+      setAddress1("");
+      setAddress2("");
+      setCity("");
+      setZip("");
+      setHobbies("");
+      setFile("");
+    } else {
+      updateRecord(editData.id, fname, lname, address1, city);
     }
-    console.log(
-      "---Form Data---",
-      fname,
-      lname,
-      gender,
-      date,
-      email,
-      phone,
-      address1,
-      address2,
-      city,
-      zip,
-      hobbies,
-      file
-    );
-
-    setFname("");
-    setLname("");
-    setGender("");
-    setDate("");
-    setEmail("");
-    setPhone("");
-    setAddress1("");
-    setAddress2("");
-    setCity("");
-    setZip("");
-    setHobbies("");
-    setFile("");
   };
 
   const viewRecord = (id) => {
@@ -270,9 +257,40 @@ function App() {
     });
   };
 
-  // const updateRecord = (id) => {};
+  const editRecord = (id) => {
+    const findRecord = data.find((record) => record.id === id);
+    setEditData(findRecord);
+  };
 
-  const editRecord = (id) => {};
+  const updateRecord = (id, fname, lname, address1, city) => {
+    const newRecord = data.map((record) =>
+      record.id === id ? { id, fname, lname, address1, city } : record
+    );
+    setData(newRecord);
+    setEditData("");
+  };
+
+  useEffect(() => {
+    if (editData) {
+      setFname(editData.fname);
+      setLname(editData.lname);
+      setAddress1(editData.address1);
+      setCity(editData.city);
+    } else {
+      setFname("");
+      setLname("");
+      setGender("");
+      setDate("");
+      setEmail("");
+      setPhone("");
+      setAddress1("");
+      setAddress2("");
+      setCity("");
+      setZip("");
+      setHobbies("");
+      setFile("");
+    }
+  }, [setFname, setLname, setAddress1, setCity, editData]);
 
   const deleteRecord = (id) => {
     alert("Are you sure want to delete the record permanently?");
@@ -304,6 +322,7 @@ function App() {
                   <u>Web Application Form</u>
                 </center>
               </h2>
+              <h4>All form fields are mandatory *</h4>
             </Grid>
             <Grid item xs={6}>
               <div className="item">
@@ -610,6 +629,10 @@ function App() {
                   Delete
                 </Button>
               </CardActions>
+              <h5>
+                In case edit operation please fill all fields in the form, I
+                have edited only few fields *
+              </h5>
             </Card>
           </div>
         );

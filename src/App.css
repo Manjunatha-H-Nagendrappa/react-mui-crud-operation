@@ -37,6 +37,10 @@
   }
 }
 
+h4 {
+  color: red;
+}
+
 .item {
   padding: 16px;
 }
@@ -44,9 +48,11 @@
 h2 {
   padding-bottom: 20px;
 }
+
 h6 {
   color: green;
 }
+
 .button {
   padding: 20px;
 }
